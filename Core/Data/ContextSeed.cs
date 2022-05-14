@@ -103,28 +103,28 @@ namespace Core.Data
                 {
                     Description = "Don’t dare contradict them",
                     PersonalityTrait = Constants.PersonalityTrait.Introvert,
-                    Weightage = 5,
+                    Weightage = 12,
                     QuestionId = q3.QuestionId,
                 });
                 await context.QuestionOptions.AddAsync(new QuestionOptions
                 {
                     Description = " Think that they are obviously right",
                     PersonalityTrait = Constants.PersonalityTrait.Introvert,
-                    Weightage = 5,
+                    Weightage = 10,
                     QuestionId = q3.QuestionId,
                 });
                 await context.QuestionOptions.AddAsync(new QuestionOptions
                 {
                     Description = "Defend your own point of view, tooth and nail",
                     PersonalityTrait = Constants.PersonalityTrait.Extrovert,
-                    Weightage = 5,
+                    Weightage = 8,
                     QuestionId = q3.QuestionId,
                 });
                 await context.QuestionOptions.AddAsync(new QuestionOptions
                 {
                     Description = "Continuously interrupt your colleague",
                     PersonalityTrait = Constants.PersonalityTrait.Extrovert,
-                    Weightage = 5,
+                    Weightage = 12,
                     QuestionId = q3.QuestionId,
                 });
 
@@ -172,37 +172,37 @@ namespace Core.Data
                 Question q5 = new Question
                 {
                     QuestionId = Guid.NewGuid(),
-                    Description = ""
+                    Description = "During dinner parties at your home, you have a hard time with people who:"
                 };
 
                 await context.Questions.AddAsync(q5);
 
                 await context.QuestionOptions.AddAsync(new QuestionOptions
                 {
-                    Description = "",
+                    Description = "Ask you to tell a story in front of everyone else ",
                     PersonalityTrait = Constants.PersonalityTrait.Introvert,
-                    Weightage = 5,
+                    Weightage = 12,
                     QuestionId = q5.QuestionId,
                 });
                 await context.QuestionOptions.AddAsync(new QuestionOptions
                 {
-                    Description = "",
+                    Description = "Talk privately between themselves ",
                     PersonalityTrait = Constants.PersonalityTrait.Introvert,
-                    Weightage = 5,
+                    Weightage = 9,
                     QuestionId = q5.QuestionId,
                 });
                 await context.QuestionOptions.AddAsync(new QuestionOptions
                 {
-                    Description = "",
+                    Description = "Hang around you all evening ",
                     PersonalityTrait = Constants.PersonalityTrait.Extrovert,
-                    Weightage = 5,
+                    Weightage = 7,
                     QuestionId = q5.QuestionId,
                 });
                 await context.QuestionOptions.AddAsync(new QuestionOptions
                 {
-                    Description = "",
+                    Description = "Always drag the conversation back to themselves",
                     PersonalityTrait = Constants.PersonalityTrait.Extrovert,
-                    Weightage = 5,
+                    Weightage = 10,
                     QuestionId = q5.QuestionId,
                 });
 
