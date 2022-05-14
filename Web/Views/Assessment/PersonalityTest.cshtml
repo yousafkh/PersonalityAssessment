@@ -1,0 +1,162 @@
+﻿@model ICollection<Core.ViewModels.ViewPersonalityTestVM>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section Styles {
+    <style>
+        label {
+            display: block;
+            margin: 6px;
+            padding: 6px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type='radio'] {
+            border: 5px solid #fff;
+            display: none;
+        }
+
+            input[type='radio']:checked + label {
+                transition: all 0.2s;
+                border: 5px solid #4cbd5e80;
+            }
+    </style>
+}
+
+
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    @{int index = 0; }
+    @foreach (var question in Model)
+    {
+        string active = index == 0 ? "active" : "";
+        <li class="nav-item d-none">
+            <a class="nav-link @active" id="pills-tab-@index" data-toggle="pill" href="#pills-@index" role="tab" aria-controls="pills-index" aria-selected="true"></a>
+        </li>
+        index++;
+    }
+</ul>
+<form id="personalityForm">
+    <div class="tab-content" id="pills-tabContent">
+
+        @{ index = 0; }
+        @foreach (var question in Model)
+        {
+            int IncIndex = index, DecIndex = index;
+            string active = index == 0 ? "show active" : "";
+            <div class="tab-pane fade @active" id="pills-@index" role="tabpanel" aria-labelledby="pills-tab-@index">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="question-box">
+                            <!-- Question Description-->
+                            <p>@question.QuestionDescription</p>
+                            <input type="hidden" name="quesion-@index-id" value="@question.QuestionId" />
+                        </div>
+
+                        <!-- Options -->
+                        @for (int i = 0; i < question.Options.Count; i++)
+                        {
+                            <input id="option-@index-@i" type="radio" name="option-@index" value="@question.Options.ElementAt(i).OptionId" />
+                            <label for="option-@index-@i"> @question.Options.ElementAt(i).OptionDescription</label>
+                        }
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mt-3 justify-content-between">
+                        @{ IncIndex += 1; DecIndex -= 1; }
+                        @if (index != 0)
+                        {
+                            <button id="questionPrevBtn-@index" data-target="pills-tab-@DecIndex" type="button" class="btn custom-btn btn-secondary mb-3 mr-3 ">Previous</button>
+                        }
+                        @if (index == Model.Count - 1)
+                        {
+                            <input type="submit" id="submit" value="Submit" class="btn btn-primary float-right mb-3">
+                        }
+                        @if (index != Model.Count - 1)
+                        {
+                            <button id="questionNextBtn-@index" data-target="pills-tab-@IncIndex" type="button" class="btn custom-btn btn-primary float-right mb-3">Next</button>
+
+                        }
+                    </div>
+                </div>
+            </div>
+            index++;
+        }
+
+    </div>
+</form>
+@section Scripts {
+    <script>
+        $('.custom-btn').on('click', function (e) {
+            e.preventDefault();
+            //console.log(`'#${e.target.dataset.target}'`)
+            $(`#${e.target.dataset.target}`).tab('show');
+        });
+
+        (function ($) {
+            const TOTAL_QUESTIONS = @Model.Count;
+
+            let submitBtn = $('#submit');
+
+            let questionaireData = [];
+
+            function collectFormData() {
+                let form = document.getElementById('personalityForm');
+
+                let questionFormData = new FormData(form);
+
+                let index = 0;
+
+                let temp = {};
+
+                questionFormData.forEach(function (value, key) {
+
+                    if (key.indexOf('id') >= 0) {
+                        temp['QuestionId'] = value;
+                    }
+
+                    if (key.indexOf('option') >= 0) {
+                        temp['OptionId'] = value;
+                        questionaireData.push(temp);
+
+                        temp = {};
+                    }
+
+                });
+            }
+
+            submitBtn.on('click', function (e) {
+                e.preventDefault();
+                console.log('clicked')
+                collectFormData();
+
+                console.log(questionaireData);
+
+                $.ajax({
+                    url: '@Url.Action("PersonalityTest", "Assessment")',
+                    type: "POST",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    processData: false,
+                    cache: false,
+                    data: JSON.stringify(questionaireData),
+					success: function (result) {
+                        if (result.status === true) {
+                            console.log(result.value);
+                            
+						} else {
+                            
+                            console.log(result.value)
+						}
+                    },
+                });
+            })
+
+        })(jQuery);
+    </script>
+}
